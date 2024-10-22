@@ -13,13 +13,18 @@ steps:
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.11'
-    jdkArchitectureOption: 'x64'
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+    mavenVersionOption: 'Default'
+    mavenOptions: '-Xmx3072m'
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: true
+    sqMavenPluginVersionChoice: 'latest'
+    checkStyleRunAnalysis: true
+    findBugsRunAnalysis: true
     
 
 - task: CopyFiles@2
@@ -32,3 +37,10 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'warfile-artifact'
     publishLocation: 'Container'
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'Azure subscription 1(615f4b25-3296-48a2-a1b9-88bb04d48ed4)'
+    appType: 'webAppLinux'
+    appName: 'azuredevopswebsite'
+    package: '$(System.DefaultWorkingDirectory)/**/*.war'
