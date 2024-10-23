@@ -27,16 +27,17 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
           $(tag)
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'azure-docker-service-connection'
+        command: 'login'
 
-- task: Docker@2
-  inputs:
-    containerRegistry: 'azure-docker-service-connection'
-    command: 'login'
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'azure-docker-service-connection'
+        repository: 'kendall007/azure-webapp-repo'
+        command: 'buildAndPush'
+        Dockerfile: '**/AzureDockerfile'
 
-- task: Docker@2
-  inputs:
-    containerRegistry: 'azure-docker-service-connection'
-    repository: 'kendall007/azure-webapp-repo'
-    command: 'buildAndPush'
-    Dockerfile: '**/AzureDockerfile'
+
 
