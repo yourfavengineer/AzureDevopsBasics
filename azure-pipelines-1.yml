@@ -47,3 +47,16 @@ steps:
     sonarQubeRunAnalysis: false
     checkStyleRunAnalysis: true
     pmdRunAnalysis: true
+
+- task: Docker@2
+  inputs:
+    containerRegistry: 'azure-docker-service-connection'
+    command: 'login'
+
+- task: Docker@2
+  inputs:
+    containerRegistry: 'azure-docker-service-connection'
+    repository: 'kendall007/azure-webapp-repo'
+    command: 'buildAndPush'
+    Dockerfile: '**/AzureDockerfile'
+
